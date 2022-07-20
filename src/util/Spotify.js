@@ -1,14 +1,13 @@
 const clientId = 'fb2f2dbc190d416a9cfd0dc0e989cb3e';
-const redirect_uri = 'https://HFJammming.netlify.app';
+const redirect_uri = 'http://localhost:3000';
 
 let token;
 
 const Spotify = {
   getAccessToken() {
     if (token) {
-      return token
+      return token;
     }
-
     const newToken = window.location.href.match(/access_token=([^&]*)/);
     const newTokenExpires = window.location.href.match(/expires_in=([^&]*)/);
     if (newToken && newTokenExpires) {
@@ -25,19 +24,19 @@ const Spotify = {
 
   search(searching) {
     const token = Spotify.getAccessToken();
-    const headers = { Authorizations: 'Bearer ${token}' };
-    return fetch(`https://api.spotify.com/v1/search?type=track&q=${searching}`, { headers: headers }).then((response) => {
+    const headers = { Authorization: `Bearer ${token}` };
+    return fetch(`https://api.spotify.com/v1/search?type=track&q=${searching}`, { headers: headers }).then(response => {
       if (response.ok) {
         return response.json();
       }
       throw new Error('Request failed!');
     }, networkError => {
-      console.log(networkError.meassage);
+      console.log(networkError.message);
     }).then(jsonResponse => {
       if (!jsonResponse.tracks) {
         return [];
       }
-      return jsonResponse.track.items.map(track => ({ id: track.id, name: track.name, artist: track.artists[0].name, album: track.album.name, uri: track.uri }));
+      return jsonResponse.tracks.items.map(track => ({ id: track.id, name: track.name, artist: track.artists[0].name, album: track.album.name, uri: track.uri }));
     });
   },
 
