@@ -7,7 +7,7 @@ const Spotify = {
   getAccessToken() {
 
     if (token) {
-      return token;
+      return;
     }
     const newToken = window.location.href.match(/access_token=([^&]*)/);
     const newTokenExpires = window.location.href.match(/expires_in=([^&]*)/);
@@ -16,6 +16,7 @@ const Spotify = {
       const expiresIn = Number(newTokenExpires[1]);
       window.setTimeout(() => token = '', expiresIn * 1000);
       window.history.pushState('Access Token', null, '/');
+      
       return token;
     } else {
       const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&show_dialog=trust&redirect_uri=${redirect_uri}`;
@@ -35,7 +36,7 @@ const Spotify = {
       console.log(networkError.message);
     }).then(jsonResponse => {
       if (!jsonResponse.tracks) {
-        return [];
+        return [{}];
       }
       return jsonResponse.tracks.items.map(track => ({ id: track.id, name: track.name, artist: track.artists[0].name, album: track.album.name, uri: track.uri }));
     });
