@@ -1,10 +1,11 @@
 const clientId = 'fb2f2dbc190d416a9cfd0dc0e989cb3e';
-const redirect_uri = 'http://localhost:3000';
-
+// const redirect_uri = 'http://localhost:3000';
+const redirect_uri = 'https://hfjammming.netlify.app/';
 let token;
 
 const Spotify = {
   getAccessToken() {
+
     if (token) {
       return token;
     }
